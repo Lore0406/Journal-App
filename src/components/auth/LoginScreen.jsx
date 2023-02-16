@@ -1,30 +1,34 @@
 import { Link } from 'react-router-dom'
 import { useForm } from '../../hooks/useForm'
 import { useDispatch } from "react-redux";
-import { login } from '../../actions/authActions';
+import { startGoogleLogin, startLoginEmailPassword } from '../../actions/authActions';
 
 export const LoginScreen = () => {
 
   const dispatch = useDispatch()
 
   const { handleInputChange, values } = useForm({
-    email: "malosomentiroso@gmail.com",
-    password: "jiji"
+    email: "forgetmenots@gmail.com",
+    password: "blue"
   })
 
   const { email, password } = values
 
   const handleLogin = ( e ) => {
     e.preventDefault()
+    dispatch( startLoginEmailPassword( email, password ) ) 
+  }
 
-    dispatch(login(12345, "Osito"))
+  const handleGoogleLogin = (e) => {
+    e.preventDefault()
+    dispatch( startGoogleLogin() )
   }
 
   return (
     <>
       <h3 className='auth__title mb-1'>Login</h3>
 
-      <form onSubmit={handleLogin}>
+      <form onSubmit={ handleLogin }>
 
         <input 
           type="text"
@@ -33,7 +37,7 @@ export const LoginScreen = () => {
           className='auth__input'
           autoComplete='off'
           value={ email }
-          onChange={handleInputChange}
+          onChange={ handleInputChange }
         />
 
         <input 
@@ -42,7 +46,7 @@ export const LoginScreen = () => {
           name="password"
           className='auth__input'
           value={ password }
-          onChange={handleInputChange}
+          onChange={ handleInputChange }
         />
 
         <button
@@ -59,6 +63,7 @@ export const LoginScreen = () => {
 
           <div 
             className="google-btn"
+            onClick={handleGoogleLogin}
           >
             <div className="google-icon-wrapper">
               <img className="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="google button" />
@@ -78,10 +83,7 @@ export const LoginScreen = () => {
         >
           Create new account
         </Link>
-        
-
       </form>
-
     </>
   )
 }
