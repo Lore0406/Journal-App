@@ -25,6 +25,7 @@ googleProvider.setCustomParameters({
 })
 
 export{
+  firebase,
   auth,
   db,
   googleProvider, 

@@ -1,21 +1,46 @@
-import { googleProvider, auth } from "../firebase/firebaseConfig"
+import { googleProvider, auth, firebase } from "../firebase/firebaseConfig"
 import { types } from "../types/types"
-import { signInWithPopup } from "firebase/auth"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth"
+import { finishLoading, startLoading } from "./loadingActions"
 
 export const startLoginEmailPassword = ( email, password ) => {
+   return ( dispatch ) => {
 
-   return (dispatch) => {
+      dispatch( startLoading() )
+   
+      signInWithEmailAndPassword( auth, email, password )
+         .then( ({ user }) => {
+            dispatch(
+               login( user.uid, user.displayName )
+            )
+            dispatch( finishLoading() )
+         })
+         .catch(err => {
+            console.log(err);
+         })
+   }
+  
+}
 
-      setTimeout(() => {
-         dispatch( login(123456, "EvilOso") )
-      }, 3500)
-
+export const startRegisterWithEmailPasswordName = ( email, password, name ) =>{ 
+   return ( dispatch ) => {
+      createUserWithEmailAndPassword(auth, email, password)
+         .then( async ({ user }) => {
+            
+            await updateProfile(user, { displayName: name })
+            
+            dispatch(
+               login(user.uid, user.displayName)
+            )
+         })
+         .catch(err => {
+            console.log(err);
+         })
    }
 }
 
 export const startGoogleLogin = () => {
    return (dispatch) => {
-      // console.log("wot: ", googleProvider)
       signInWithPopup( auth, googleProvider )
          .then( ({ user }) => {
             dispatch(
@@ -34,3 +59,15 @@ export const login = (uid, displayName) => {
       }
    }
 }
+
+export const startLogout = () =>{
+   return async ( dispatch ) =>{
+      await signOut( auth )
+      dispatch( logout() )
+   }
+}
+
+export const logout = () => ({
+   type: types.logout
+
+})
