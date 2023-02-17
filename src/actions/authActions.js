@@ -1,8 +1,10 @@
+import Swal from 'sweetalert2'
 import { googleProvider, auth, firebase } from "../firebase/firebaseConfig"
 import { types } from "../types/types"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth"
 import { finishLoading, startLoading } from "./loadingActions"
 
+// acción logging con mail y password 
 export const startLoginEmailPassword = ( email, password ) => {
    return ( dispatch ) => {
 
@@ -13,15 +15,19 @@ export const startLoginEmailPassword = ( email, password ) => {
             dispatch(
                login( user.uid, user.displayName )
             )
+           
             dispatch( finishLoading() )
          })
          .catch(err => {
             console.log(err);
+            dispatch( finishLoading() )
+            Swal.fire('Error', err.message, 'error')
          })
    }
   
 }
 
+// acción registrarse con mail y password 
 export const startRegisterWithEmailPasswordName = ( email, password, name ) =>{ 
    return ( dispatch ) => {
       createUserWithEmailAndPassword(auth, email, password)
@@ -34,11 +40,14 @@ export const startRegisterWithEmailPasswordName = ( email, password, name ) =>{
             )
          })
          .catch(err => {
-            console.log(err);
+            console.log(err)
+            // utilizamos Sweet alert para sacar los mesajes de error de firebase 
+            Swal.fire('Error', err.message, 'error')
          })
    }
 }
 
+// Acción de login con botón de Google
 export const startGoogleLogin = () => {
    return (dispatch) => {
       signInWithPopup( auth, googleProvider )
@@ -50,6 +59,7 @@ export const startGoogleLogin = () => {
    }
 }
 
+// acción de login 
 export const login = (uid, displayName) => {
    return {
       type: types.login,
@@ -60,6 +70,7 @@ export const login = (uid, displayName) => {
    }
 }
 
+// accion de logout
 export const startLogout = () =>{
    return async ( dispatch ) =>{
       await signOut( auth )
@@ -67,7 +78,7 @@ export const startLogout = () =>{
    }
 }
 
+// accion de logout
 export const logout = () => ({
    type: types.logout
-
 })
