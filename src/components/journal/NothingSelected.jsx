@@ -1,14 +1,11 @@
 export const NothingSelected = () => {
-  return (
-    <div className="nothing__main-content">
-      <p>
-         Select something
+   return (
+      <div className="nothing__main-content">
+         <p>Select something</p>
          <hr />
-         or create an entry!
-      </p>
+         <p>or create an entry!</p>
 
-      <i className="far fa-star fa-4x mt-5"></i>
-      
-    </div>
-  )
-}
+         <i className="far fa-star fa-4x mt-5"></i>
+      </div>
+   );
+};

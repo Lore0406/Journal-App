@@ -13,7 +13,7 @@ import {
    Routes,
    Route,
 } from "react-router-dom"
-
+import { startLoadingNotes } from "../actions/notesAction";
 
 export const AppRouter = () => {
 
@@ -23,11 +23,15 @@ export const AppRouter = () => {
    const [isLoggedIn, setIsLoggedIn] = useState(false)
 
    useEffect( () => {
-      onAuthStateChanged(auth,  ( user ) =>{
+      onAuthStateChanged(auth, async( user ) =>{
 
          if ( user?.uid ) {
             dispatch( login ( user.uid, user.displayName ))
             setIsLoggedIn( true )
+
+            // cargar notas 
+            dispatch( startLoadingNotes ( user.uid ) )
+
          }else {
             setIsLoggedIn( false )
          }
@@ -38,7 +42,7 @@ export const AppRouter = () => {
 
    if ( checking ) {
       return (
-         <h1>Loggin in...</h1>
+         <h1>Loading, please wait...</h1>
       )
    }
    

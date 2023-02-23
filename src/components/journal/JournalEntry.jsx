@@ -1,31 +1,48 @@
-export const JournalEntry = () => {
-  return (
-    <div className="journal__entry pointer">
+import moment from 'moment'
+import { useDispatch } from 'react-redux'
+import { activeNote }from '../../actions/notesAction'
 
+// recibe una desestructuración de notes!!! Si no todo sale en array
+export const JournalEntry = ( {id, date, title, body, url} ) => {
+
+   // usando libreria moment para formatear la fecha 
+   const noteDate = moment(date)
+
+   const dispatch = useDispatch()
+   const handleEntryClick = () => {
+      dispatch( activeNote( id, {
+         date, title, body, url 
+      } ) )
+   }
+  
+
+   return (
       <div 
-         className="journal__entry-picture"
-         style={{
-            backgroundSize: 'cover',
-            backgroundImage: 'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToRooEkgUSA8K9EFYl5j7SbTmV_78crkCpZA&usqp=CAU)',
-            backgroundRepeat: 'no-repeat'
-         }}
+         className="journal__entry pointer animate__animated animate__fadeInRight animate__fast"
+         onClick={ handleEntryClick }
       >
-      </div>
+         {
+            url &&
+            <div
+               className="journal__entry-picture"
+               style={{
+                  backgroundSize: "cover",
+                  backgroundImage: `url( ${ url } )`,
+                  backgroundRepeat: "no-repeat",
+               }}
+            >
+            </div>
+         }
 
-      <div className="journal__entry-body">
-         <p className="journal__entry-title mt-1">
-            A new day for Osito 
-         </p>
-         <p className="journal__entry-content">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-         </p>
-      </div>
+         <div className="journal__entry-body">
+            <p className="journal__entry-title mt-1">{ title }</p>
+            <p className="journal__entry-content">{ body }</p>
+         </div>
 
-      <div className="journal__entry-date">
-         <span>Monday</span>
-         <h4>28</h4>
+         <div className="journal__entry-date">
+            <span>{ noteDate.format('dddd') }</span>
+            <h4>{ noteDate.format('Do') }</h4>
+         </div>
       </div>
-
-    </div>
-  )
+   )
 }

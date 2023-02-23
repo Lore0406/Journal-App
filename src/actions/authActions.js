@@ -1,8 +1,9 @@
 import Swal from 'sweetalert2'
-import { googleProvider, auth, firebase } from "../firebase/firebaseConfig"
+import { googleProvider, auth } from "../firebase/firebaseConfig"
 import { types } from "../types/types"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth"
 import { finishLoading, startLoading } from "./loadingActions"
+import { noteLogout } from './notesAction'
 
 // acción logging con mail y password 
 export const startLoginEmailPassword = ( email, password ) => {
@@ -75,6 +76,9 @@ export const startLogout = () =>{
    return async ( dispatch ) =>{
       await signOut( auth )
       dispatch( logout() )
+
+      // hay que disparra la accion que purga las notas 
+      dispatch ( noteLogout() )
    }
 }
 

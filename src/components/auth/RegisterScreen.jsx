@@ -17,6 +17,7 @@ export const RegisterScreen = () => {
     password2: '123456',
 
   })
+  
 
   const { name, email, password, password2 } = values
 
@@ -51,7 +52,10 @@ export const RegisterScreen = () => {
     <>
     <h3 className='auth__title mb-1'>Login</h3>
 
-    <form onSubmit={ handleRegister }>
+    <form
+      className='animate__animated animate__fadeIn animate__fast'
+      onSubmit={ handleRegister }
+    >
       {
         msgError &&
         (
